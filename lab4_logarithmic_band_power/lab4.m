@@ -314,7 +314,6 @@ if ~isempty(trials)
     % Optional: link x-axes for synchronized zoom/pan
     linkaxes(findall(gcf,'Type','axes'), 'x');
     sgtitle(sprintf('Trial %d (label = %d): Raw, μ and β bands', k, trials(k).label));
-
 else
     warning('No trials to plot.');
 end
