@@ -7,7 +7,7 @@
 
 clear; clc; close all;
 
-%% ------------------- 0) Paths & parameters (EDIT) ----------------
+%% ------------------- Paths & parameters (EDIT) ----------------
 % Point these to your local folders
 data_dir = fullfile('C:\Users\nihal\OneDrive\Documents\unipd\Semester3\neurorobotics-INQ4105603', 'data');                  
 
@@ -21,7 +21,7 @@ winSec = [0, 4];   % from cue onset to +4 s
 % Channel to visualize for examples/averages
 vizChannelName = "eeg:7";   % change if your dataset has different labels
 
-%% ------------------- 1) Load & concatenate GDFs ------------------
+%% ------------------- Load & concatenate GDFs ------------------
 % Concatenate EEG and EVENTS (with POS offsets). Also track run index Rk.
 
 EEG_all      = [];               % concatenated EEG (samples x channels)
@@ -73,7 +73,7 @@ nSamples = size(EEG_all, 1);
 nCh      = size(EEG_all, 2);
 fprintf('Done. Total samples: %d | Channels: %d | Fs = %.2f Hz\n', nSamples, nCh, Fs_ref);
 
-%% ------------------- 2) Event summary (discover codes) ----------
+%% ------------------- Event summary (discover codes) ----------
 % This prints a table of unique event codes, counts, and median duration.
 % Use this to fill in the EVENT CODE MAP in the next section.
 
@@ -92,7 +92,7 @@ else
     error('No events found in concatenated data. Cannot proceed.');
 end
 
-%% ------------------- 3) EVENT CODE MAP----------------------
+%% ------------------- EVENT CODE MAP----------------------
 % IMPORTANT: After you read the summary above, set the code groups below.
 % Example placeholders are commented; replace with your actual codes.
 % If you are unsure, run once, inspect the table, edit, and run again.
@@ -114,7 +114,7 @@ for k = 1:numel(defaults)
     if ~isfield(codeMap, defaults{k}), codeMap.(defaults{k}) = []; end
 end
 
-%% ------------------- 4) Build label vectors (Tk, Fk, Ak, CFk, Xk, Rk)
+%% ------------------- Build label vectors (Tk, Fk, Ak, CFk, Xk, Rk)
 % Lab03 requirement: create per-sample label vectors for concatenated data.
 % Rk marks which run/file each sample belongs to (1..#files).
 
@@ -136,7 +136,7 @@ subplot(6,1,4); plot(S.CFk,'g'); ylabel('CFk');
 subplot(6,1,5); plot(S.Xk,'r');  ylabel('Xk');
 subplot(6,1,6); plot(Rk,'c');    ylabel('Rk');   xlabel('Samples');
 
-%% ------------------- 5) Trial extraction (using cues) ------------
+%% ------------------- Trial extraction (using cues) ------------
 % We epoch around cue onsets (rising edges of Ak != 0) and create:
 %   - trials: [samples x channels x trials]
 %   - Ck: one cue code per trial
@@ -165,7 +165,7 @@ end
 fprintf('\nTrials built: %d | Window [%.2f %.2f] s | Samples/window: %d\n', ...
     nTrials, winSec(1), winSec(2), winN);
 
-%% ------------------- 6) Visualization ---------------------------
+%% ------------------- Visualization ---------------------------
 % a) One example trial per unique cue code, plotting selected channel
 % b) Grand average per cue code for the selected channel
 
