@@ -1,8 +1,8 @@
 %% Load EEG Data
 clear;
 
-% Adjust the path/filename
-gdf_file = fullfile('C:\Users\nihal\OneDrive\Documents\unipd\Semester3\NR\data','ah7.20170613.161402.offline.mi.mi_bhbf.gdf');
+% Adjust the path/filename - ACCORDING TO USER
+gdf_file = fullfile('C:\Users\nihal\OneDrive\Documents\unipd\Semester3\neurorobotics-INQ4105603\data','ah7.20170613.161402.offline.mi.mi_bhbf.gdf');
 
 % BioSig sload returns [data, header]
 [EEG, HDR] = sload(gdf_file);
