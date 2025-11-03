@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  LAB 04 — MI BMI Logarithmic Band Power
+%  LAB 04 and 05 — MI BMI Logarithmic Band Power and Spatial Filters
 %
 %  GOAL:
 %  -----
@@ -77,6 +77,11 @@ gdfFolder = 'C:\Users\nihal\OneDrive\Documents\unipd\Semester3\neurorobotics-INQ
 %% Run concatenation and show a quick summary
 [allS, fs, labels, EVENT, filesUsed] = concatGdfDropLast(gdfFolder);
 
+%% Spatial filtering mode: 'none' | 'car' | 'lap'
+spatialMode = 'none';         % <— change to 'car' or 'lap' to switch
+lapMaskFile = 'laplacian16.mat';   % your provided mask in working directory
+
+%% For basic info 
 fprintf('Files used (%d):\n', numel(filesUsed));
 for i = 1:numel(filesUsed), fprintf('  %s\n', filesUsed{i}); end
 
@@ -103,6 +108,60 @@ present = unique(EVENT.TYP)';
 fprintf('Present event types (hex): ');
 fprintf('0x%04X ', present);
 fprintf('\n');
+
+%% Apply spatial filter to raw EEG (before band-power pipeline)
+% Input: allS  [samples x channels]
+% Output: Sx   [samples x channels] (spatially filtered)
+
+Sx = allS;  % default (no spatial filtering)
+
+switch lower(spatialMode)
+    case 'none'
+        % No change; baseline condition for comparison
+        fprintf('Spatial mode: NONE (baseline)\n');
+
+    case 'car'
+        % Common Average Reference: subtract per-sample channel mean
+        % CAR works row-wise: for each time sample, subtract the mean across channels
+        m = mean(allS, 2, 'omitnan');      % [samples x 1]
+        Sx = allS - m;                     % implicit broadcast to all channels
+        fprintf('Spatial mode: CAR (common average reference)\n');
+
+    case 'lap'
+        % Laplacian: multiply by a spatial mask (channels x channels)
+        fprintf('Spatial mode: LAPLACIAN (using %s)\n', lapMaskFile);
+
+        % Load the mask; try to find a square matrix in the MAT-file
+        L = load(lapMaskFile);
+        % Heuristic: pick the first square numeric field as the mask
+        mask = [];
+        fn = fieldnames(L);
+        for i = 1:numel(fn)
+            val = L.(fn{i});
+            if isnumeric(val) && ismatrix(val) && size(val,1)==size(val,2)
+                mask = val; break;
+            end
+        end
+        assert(~isempty(mask), 'No square numeric mask found in %s', lapMaskFile);
+
+        % Sanity checks on dimensions & channel order
+        assert(size(mask,1) == size(allS,2), ...
+            'Laplacian mask size (%d) does not match #channels (%d)', ...
+            size(mask,1), size(allS,2));
+
+        % If the mask expects a different channel order than 'labels', reorder here.
+        % (Most course masks match the recording montage after dropping trigger.)
+
+        % Apply Laplacian: each sample row times mask → filtered channels
+        % If your mask is defined as channels×channels *column* mixing, use Sx = allS * mask.
+        % If defined as *row* mixing, use Sx = mask * allS' then transpose.
+        % Most Laplacian masks are applied as right-multiply:
+        Sx = allS * mask;
+
+    otherwise
+        error('Unknown spatialMode: %s', spatialMode);
+end
+
 
 %% Filter design for mu (10–12 Hz) and beta (18–24 Hz)
 muBand   = [10 12];      % Hz (narrow, as many labs specify)
