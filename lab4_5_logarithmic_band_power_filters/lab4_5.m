@@ -78,7 +78,7 @@ gdfFolder = 'C:\Users\nihal\OneDrive\Documents\unipd\Semester3\neurorobotics-INQ
 [allS, fs, labels, EVENT, filesUsed] = concatGdfDropLast(gdfFolder);
 
 %% Spatial filtering mode: 'none' | 'car' | 'lap'
-spatialMode = 'none';         % <— change to 'car' or 'lap' to switch
+spatialMode = 'lap';         % <— change to 'car' or 'lap' to switch
 lapMaskFile = 'laplacian16.mat';   % your provided mask in working directory
 
 %% For basic info 
@@ -185,11 +185,11 @@ avgN = round(avgWinSec * fs);
 avgKernel = ones(avgN,1) / avgN; % uniform window
 useLog10 = true;                 % log base 10
 
-muPow   = zeros(size(allS));
-betaPow = zeros(size(allS));
+muPow   = zeros(size(Sx));
+betaPow = zeros(size(Sx));
 
-for ch = 1:size(allS,2)
-    x = allS(:,ch);
+for ch = 1:size(Sx,2)
+    x = Sx(:,ch);
 
     % band-pass (zero-phase)
     x_mu   = filtfilt(bu_mu,   au_mu,   x);
@@ -310,7 +310,7 @@ end
 fprintf('Trials extracted (fixation->feedback+dur): %d\n', numel(trials));
 
 %% Pick 3 channels to visualize 
-wantedLabels = {'eeg:3','eeg:6','eeg:8'};
+wantedLabels = {'eeg:7','eeg:9','eeg:11'};
 plotIdx = [];
 
 for nm = wantedLabels
@@ -372,7 +372,8 @@ if ~isempty(trials)
 
     % Optional: link x-axes for synchronized zoom/pan
     linkaxes(findall(gcf,'Type','axes'), 'x');
-    sgtitle(sprintf('Trial %d (label = %d): Raw, μ and β bands', k, trials(k).label));
+    sgtitle(sprintf('Trial %d (label=%d) — Spatial mode: %s', k, trials(k).label, upper(spatialMode)));
+
 else
     warning('No trials to plot.');
 end
@@ -425,7 +426,8 @@ for ci = 1:numel(plotIdx)
     legend('Location','best');
     xlim([0, winSec]); ylim auto;
 end
-sgtitle('\mu band | Mean ± SE across classes and channels');
+sgtitle(sprintf('\\mu band | Mean ± SE across classes and channels — Spatial mode: %s', upper(spatialMode)));
+
 
 %% ==================== beta-band figure ====================
 figure('Name','β band | Mean ± SE | all channels');
@@ -449,7 +451,7 @@ for ci = 1:numel(plotIdx)
     legend('Location','best');
     xlim([0, winSec]); ylim auto;
 end
-sgtitle('\beta band | Mean ± SE across classes and channels');
+sgtitle(sprintf('\\beta band | Mean ± SE across classes and channels — Spatial mode: %s', upper(spatialMode)));
 
 
 
