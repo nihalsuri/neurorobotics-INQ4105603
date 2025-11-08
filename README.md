@@ -14,11 +14,17 @@ Replace or adapt paths to your local layout.
 ├── Lab02_GDF_data_format_and_manipulation.pdf
 ├── load_and_plot_gdf.m
 ├── make_labels_from_events.m
-├── event_summary.m
-└── example_output.png
 
 /Lab04_05_Logarithmic_Band_Power/
 ├── Lab04_MI BMI Logarithmic band power.pdf
+├── getAllGdfFiles.m
+├── concatGdfDropLast.m
+├── applySpatialFilter.m
+├── lab5.m
+└── results/
+
+/Lab06_ERD_ERS_/
+├── Lab06 ERD_ERS band power.pdf
 ├── getAllGdfFiles.m
 ├── concatGdfDropLast.m
 ├── lab4.m
@@ -34,7 +40,7 @@ README.md
 Each lab builds progressively:
 1. Lab 01 — MATLAB basics and signal plotting  
 2. Lab 02,03 — GDF data format, EEG structure, and event labeling  
-3. Lab 04 — Logarithmic band power
+3. Lab 04,05 — Logarithmic band power
 
 ---
 
