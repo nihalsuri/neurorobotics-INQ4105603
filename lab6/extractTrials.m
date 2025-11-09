@@ -1,4 +1,4 @@
-function trials = extractTrials(EVENT, fs, EV_FIX, EV_FB, EV_HND, EV_FT, EV_RST, N, winSec)
+function trials = extractTrials(EVENT, fs, EV_FIX, EV_FB, EV_HND, EV_FT, N, winSec)
 % Build trials from fixation to (feedback+dur) when present; otherwise a fixed window.
 % Inputs:
 %   EVENT: struct with fields TYP, POS, DUR (samples)
@@ -51,8 +51,6 @@ function trials = extractTrials(EVENT, fs, EV_FIX, EV_FB, EV_HND, EV_FT, EV_RST,
             L = 1;
         elseif any(types == EV_FT)
             L = 2;
-        elseif any(types == EV_RST)
-            L = 0;
         else
             continue;   % no recognizable cue
         end
