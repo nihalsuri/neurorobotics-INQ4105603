@@ -61,6 +61,7 @@ trials = extractTrials(EVENT, fs, EV_FIX, EV_FB, EV_HND, EV_FT, EV_RST, size(all
 fprintf('Extracted %d trials.\n', numel(trials));
 
 %% -------------------- SELECT CHANNELS --------------------
+%% eeg7 - C3, eeg9 - Cz, eeg11 - C4
 wantedLabels = {'eeg:7','eeg:9','eeg:11'};
 plotIdx = find(ismember(labels, wantedLabels));
 if numel(plotIdx) < 3

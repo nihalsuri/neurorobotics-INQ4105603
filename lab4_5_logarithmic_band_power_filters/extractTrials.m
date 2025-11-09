@@ -40,7 +40,7 @@ function trials = extractTrials(EVENT, fs, EV_FIX, EV_FB, EV_HND, EV_FT, EV_RST,
             t_stop = t_start + winSamp - 1;
         end
 
-        % cap to signal length (THIS is the key fix)
+        % cap to signal length
         t_stop = min(t_stop, N);
         if t_stop <= t_start, continue; end
 
