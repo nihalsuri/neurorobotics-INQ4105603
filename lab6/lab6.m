@@ -253,7 +253,7 @@ figure('Name','Topoplots — μ band ERD/ERS');
 subplot(2,2,1); topoplot(ERD_Ref_Hands_mu, chanlocs16); title('μ: Hands — Reference');
 subplot(2,2,2); topoplot(ERD_Act_Hands_mu, chanlocs16); title('μ: Hands — Activity');
 subplot(2,2,3); topoplot(ERD_Ref_Feet_mu,  chanlocs16); title('μ: Feet — Reference');
-subplot(2,2,4); topoplot(ERD_Act_Feet_mu,  chanlocs16); title('μ: Feet — Activity');
+subplot(2,2,4); topoplot(ERD_Act_Feet_mu,  chanlocs16, 'electrodes', 'on'); title('μ: Feet — Activity');
 colorbar;
 
 % ---- β band topoplots ----
